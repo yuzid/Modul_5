@@ -39,9 +39,23 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-    # 4. Memperbarui layanan Serverless Container (Contoh: AWS App Runner / ECS) [cite: 102]
-    # Catatan: Sesuaikan bagian ini dengan layanan komputasi spesifik yang Anda gunakan.
-    - name: Deploy to Cloud
+    # 4. Deploy ke Serverless Container (AWS ECS Fargate)
+    - name: Download task definition
       run: |
-        echo "Menjalankan perintah update service cloud..."
-        # aws apprunner start-deployment --service-arn arn:aws:apprunner:...
+        aws ecs describe-task-definition --task-definition fargate-portal-task --query taskDefinition > task-definition.json
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition.json
+        container-name: portal-cluster-modul6  # Sesuaikan dengan nama container di Langkah 1 Poin 2
+        image: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.SERVICE_NAME }}:latest
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: fargate-portal-service
+        cluster: fargate-portal-cluster
+        wait-for-service-stability: true
