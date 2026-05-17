@@ -16,7 +16,7 @@ app.use(cors({
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type']
 }));
-
+// Triggering new CI/CD pipeline run
 app.use(express.json());
 
 const frontendBuildPath = process.env.FRONTEND_BUILD_PATH || path.join(process.cwd(), 'frontend-build');
