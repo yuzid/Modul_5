@@ -34,7 +34,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ secrets.SERVICE_NAME }}
-        IMAGE_TAG: latest
+        IMAGE_TAG: ${{ github.sha }}
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
@@ -50,7 +50,7 @@ jobs:
       with:
         task-definition: task-definition.json
         container-name: portal-cluster-modul6  # Sesuaikan dengan nama container di Langkah 1 Poin 2
-        image: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.SERVICE_NAME }}:latest
+        image: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.SERVICE_NAME }}:${{ github.sha }}
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
