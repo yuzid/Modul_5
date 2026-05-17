@@ -10,7 +10,6 @@ Terdapat juga `Dockerfile` di root untuk membangun kedua aplikasi dalam satu ima
 ## Build dan jalankan dengan Docker root
 
 ```bash
-cd /home/ledd/backend-portal
 docker build -t portal-fullstack .
 docker run --rm -p 5000:5000 --env-file backend-portal/.env portal-fullstack
 ```
