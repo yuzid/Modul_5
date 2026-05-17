@@ -1,0 +1,45 @@
+name: CI/CD Pipeline Backend Portal
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Mengambil salinan kode sumber dari repositori [cite: 99]
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # 2. Melakukan autentikasi ke platform Cloud (AWS) [cite: 100]
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    # Login ke Container Registry
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    # 3. Membangun image Docker dan mengirimkannya [cite: 101]
+    - name: Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ secrets.SERVICE_NAME }}
+        IMAGE_TAG: latest
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+    # 4. Memperbarui layanan Serverless Container (Contoh: AWS App Runner / ECS) [cite: 102]
+    # Catatan: Sesuaikan bagian ini dengan layanan komputasi spesifik yang Anda gunakan.
+    - name: Deploy to Cloud
+      run: |
+        echo "Menjalankan perintah update service cloud..."
+        # aws apprunner start-deployment --service-arn arn:aws:apprunner:...
