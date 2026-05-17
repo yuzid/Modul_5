@@ -49,7 +49,7 @@ jobs:
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: task-definition.json
-        container-name: portal-cluster-modul6  # Sesuaikan dengan nama container di Langkah 1 Poin 2
+        container-name: backend-app  
         image: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.SERVICE_NAME }}:${{ github.sha }}
 
     - name: Deploy Amazon ECS task definition
