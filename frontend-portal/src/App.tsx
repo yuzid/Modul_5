@@ -7,6 +7,8 @@ function App() {
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState('');
 
+  const apiBaseUrl = process.env.REACT_APP_API_URL || '';
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!nama || !email || !file) {
@@ -21,7 +23,7 @@ function App() {
 
     try {
       setStatus('Sedang mengunggah...');
-      const response = await axios.post('http://localhost:5000/register', formData, {
+      const response = await axios.post(`${apiBaseUrl}/register`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setStatus(`Berhasil! URL KTP: ${response.data.data.ktp_url}`);

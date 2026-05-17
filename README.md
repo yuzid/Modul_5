@@ -15,3 +15,5 @@ docker run --rm -p 5000:5000 --env-file backend-portal/.env portal-fullstack
 ```
 
 Frontend akan tersedia di `http://localhost:5000` dan backend API di `http://localhost:5000/register`.
+
+http://modul6-1661737836.eu-north-1.elb.amazonaws.com/
