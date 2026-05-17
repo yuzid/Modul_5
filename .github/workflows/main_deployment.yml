@@ -9,6 +9,8 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
+    environment: DB_Setting
+
     steps:
     # 1. Mengambil salinan kode sumber dari repositori [cite: 99]
     - name: Checkout Code
