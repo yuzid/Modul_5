@@ -43,6 +43,8 @@ jobs:
     - name: Download task definition
       run: |
         aws ecs describe-task-definition --task-definition fargate-portal-task --query taskDefinition > task-definition.json
+        # Baris baru: Menghapus parameter 'enableFaultInjection' yang tidak didukung oleh proses render
+        jq 'del(.enableFaultInjection)' task-definition.json > clean-task-def.json && mv clean-task-def.json task-definition.json
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
@@ -53,7 +55,7 @@ jobs:
         image: ${{ steps.login-ecr.outputs.registry }}/${{ secrets.SERVICE_NAME }}:${{ github.sha }}
 
     - name: Deploy Amazon ECS task definition
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v2 # <-- Naikkan versi ke v2 di sini
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
         service: fargate-portal-service
