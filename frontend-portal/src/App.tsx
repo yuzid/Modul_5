@@ -32,27 +32,53 @@ function App() {
     }
   };
 
+  const getStatusClass = () => {
+    if (status.includes('Berhasil')) return 'success';
+    if (status.includes('Error')) return 'error';
+    if (status.includes('Sedang')) return 'loading';
+    return '';
+  };
+
   return (
-    <div style={{ padding: '50px', maxWidth: '500px', margin: 'auto' }}>
-      <h2>Portal Pendaftaran Pegawai</h2>
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        <div>
-          <label>Nama Lengkap:</label><br/>
-          <input type="text" value={nama} onChange={(e) => setNama(e.target.value)} required />
-        </div>
-        <div>
-          <label>Alamat Email:</label><br/>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-        </div>
-        <div>
-          <label>Upload KTP (Gambar):</label><br/>
-          <input type="file" accept="image/*" onChange={(e) => {
-            if (e.target.files) setFile(e.target.files[0]);
-          }} required />
-        </div>
-        <button type="submit">Submit Pendaftaran</button>
-      </form>
-      {status && <p style={{ marginTop: '20px', fontWeight: 'bold' }}>{status}</p>}
+    <div className="App">
+      <div className="form-container">
+        <h2>Portal Pendaftaran Pegawai</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Nama Lengkap:</label>
+            <input 
+              type="text" 
+              value={nama} 
+              onChange={(e) => setNama(e.target.value)} 
+              placeholder="Masukkan nama lengkap Anda"
+              required 
+            />
+          </div>
+          <div className="form-group">
+            <label>Alamat Email:</label>
+            <input 
+              type="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              placeholder="Masukkan alamat email Anda"
+              required 
+            />
+          </div>
+          <div className="form-group">
+            <label>Upload KTP (Gambar):</label>
+            <input 
+              type="file" 
+              accept="image/*" 
+              onChange={(e) => {
+                if (e.target.files) setFile(e.target.files[0]);
+              }} 
+              required 
+            />
+          </div>
+          <button type="submit" className="submit-button">Submit Pendaftaran</button>
+        </form>
+        {status && <div className={`status-message ${getStatusClass()}`}>{status}</div>}
+      </div>
     </div>
   );
 }
