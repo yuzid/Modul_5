@@ -61,7 +61,7 @@ app.post('/register', upload.single('ktp'), async (req: Request, res: Response) 
             Key: fileName,
             Body: file.buffer,
             ContentType: file.mimetype,
-            ACL: 'public-read' as const // Agar bisa diakses publik [cite: 35]
+            // ACL: 'public-read' as const // Agar bisa diakses publik [cite: 35]
         };
 
         await s3Client.send(new PutObjectCommand(uploadParams));
