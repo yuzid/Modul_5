@@ -58,6 +58,6 @@ jobs:
       uses: aws-actions/amazon-ecs-deploy-task-definition@v2 # <-- Naikkan versi ke v2 di sini
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: fargate-portal-task
+        service: fargate-portal-task-service
         cluster: portal-cluster-modul6
         wait-for-service-stability: true
